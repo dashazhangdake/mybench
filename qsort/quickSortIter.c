@@ -3,79 +3,73 @@
 #include <string.h>
 
 #define UNLIMIT
-#define MAXARRAY 60000 /* this number, if too large, will cause a seg. fault!! */
+#define MAXARRAY 20000 /* this number, if too large, will cause a seg. fault!! */
 
 typedef struct  {
   char qstring[128];
 } myStringStruct;
 
-int compare(const void *elem1, const void *elem2)
+int compare(myStringStruct *elem1, myStringStruct *elem2)
 {
   int result;
   
-  result = strcmp((*((myStringStruct *)elem1)).qstring, (*((myStringStruct *)elem2)).qstring);
+  result = strcmp((*elem1).qstring, (*elem2).qstring);
 
   return (result < 0) ? 1 : ((result == 0) ? 0 : -1);
 }
 
-
-int main(int argc, char *argv[]) {
-  myStringStruct array[MAXARRAY];
-  FILE *fp;
-  int i,count=0;
-  
-  if (argc<2) {
-      fprintf(stderr,"Usage: qsort_small <file>\n");
-      exit(-1);
-  }
-  else {
-    fp = fopen(argv[1],"r");
-    
-    while((fscanf(fp, "%s", &array[count].qstring) == 1) && (count < MAXARRAY)) {
-	    count++;
-    }
-  }
-
-  printf("\nSorting %d elements.\n\n",count);
-  // qsort(array,count,sizeof(struct myStringStruct),compare);
-  
-  quickSortIter(array, 0, count - 1);
-  
-  for(i=0;i<count;i++)
-    printf("%s\n", array[i].qstring);
-  return 0;
-}
-
-void swap(myStringStruct* elem1, myStringStruct* elem2) {
+void swap(myStringStruct *elem1, myStringStruct *elem2) {
     myStringStruct temp = *elem1;
     *elem1 = *elem2;
     *elem2 = temp;
 }
 
-int partition(myStringStruct array[], int left, int right) {
-    myStringStruct temp = array[right];
-    int i = left - 1;
+void quickSortIter(myStringStruct array[MAXARRAY],int first,int last){
+   int i, j, pivot, temp;
 
-    for (int j = 1; j < right; j++) {
-        if (compare(&array[j], &temp)) {
+   if(first<last){
+      pivot=first;
+      i=first;
+      j=last;
+
+      while(i<j){
+         while(i < last && compare(&array[i], &array[pivot]) >= 0)
             i++;
-            swap(&array[j], &temp);
-        }
+         while(j >= first && compare(&array[j], &array[pivot]) < 0)
+            j--;
+         if(i<j){
+            swap(&array[i], &array[j]);
+         }
+      }
+
+    swap(&array[pivot], &array[j]);
+    quickSortIter(array,first,j-1);
+    quickSortIter(array,j+1,last);
+
+   }
+}
+
+int main() {
+    myStringStruct array[MAXARRAY];
+    FILE *fp;
+    int i,count=0;
+
+    fp = fopen("input_small.dat", "r");
+    while((fscanf(fp, "%s", array[count].qstring) == 1) && (count < MAXARRAY)) {
+	    count++;
     }
 
-    swap(&array[i + 1], &array[right]);
+    for (int i = 0; i < count; i++) {
+        printf("%s\n", array[i].qstring);
+    }
 
-    return (i + 1);
-}
-
-
-void quickSortIter(myStringStruct array[], int l, int r) {
-    if (l >= r) 
-        return;
+    printf("\nSorting %d elements.\n\n",count);
+  
+    quickSortIter(array, 0, count - 1);
+  
+    for(i=0;i<count;i++)
+        printf("%s\n", array[i].qstring);
     
-    int left = l, right = r;
-
-    int p = partition(array, l, r);
-    quickSortIter(array, l, p - 1);
-    quickSortIter(array, p+1, r);
+    return 0;
 }
+
