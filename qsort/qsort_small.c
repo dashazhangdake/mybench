@@ -25,17 +25,24 @@ main(int argc, char *argv[]) {
   FILE *fp;
   int i,count=0;
   
-  if (argc<2) {
-    fprintf(stderr,"Usage: qsort_small <file>\n");
-    exit(-1);
-  }
-  else {
-    fp = fopen(argv[1],"r");
+  // if (argc<2) {
+  //   fprintf(stderr,"Usage: qsort_small <file>\n");
+  //   exit(-1);
+  // }
+  // else {
+  //   fp = fopen(argv[1],"r");
+    
+  //   while((fscanf(fp, "%s", &array[count].qstring) == 1) && (count < MAXARRAY)) {
+	//  count++;
+  //   }
+  // }
+
+  fp = fopen("./input_small.dat","r");
     
     while((fscanf(fp, "%s", &array[count].qstring) == 1) && (count < MAXARRAY)) {
 	 count++;
     }
-  }
+  
   printf("\nSorting %d elements.\n\n",count);
   qsort(array,count,sizeof(struct myStringStruct),compare);
   

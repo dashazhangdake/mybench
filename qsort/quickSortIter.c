@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define UNLIMIT
-#define MAXARRAY 20000 /* this number, if too large, will cause a seg. fault!! */
+#define MAXARRAY 60000 /* this number, if too large, will cause a seg. fault!! */
 
 typedef struct  {
   char qstring[128];
@@ -33,9 +33,9 @@ void quickSortIter(myStringStruct array[MAXARRAY],int first,int last){
       j=last;
 
       while(i<j){
-         while(i < last && compare(&array[i], &array[pivot]) >= 0)
+         while(i < last && compare(&array[i], &array[pivot]) <= 0)
             i++;
-         while(j >= first && compare(&array[j], &array[pivot]) < 0)
+         while(j >= first && compare(&array[j], &array[pivot]) > 0)
             j--;
          if(i<j){
             swap(&array[i], &array[j]);
