@@ -24,7 +24,7 @@ void swap(myStringStruct *elem1, myStringStruct *elem2) {
     *elem2 = temp;
 }
 
-void quickSortIter(myStringStruct array[MAXARRAY],int first,int last){
+void quickSortIter(myStringStruct array[],int first,int last){
    int i, j, pivot, temp;
 
    if(first<last){
